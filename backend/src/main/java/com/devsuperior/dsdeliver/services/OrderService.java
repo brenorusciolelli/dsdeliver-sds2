@@ -21,7 +21,7 @@ public class OrderService {
 
 	@Autowired
 	private OrderRepository repository;
-	
+
 	@Autowired
 	private ProductRepository productrepository;
 
@@ -40,11 +40,18 @@ public class OrderService {
 			Product product = productrepository.getOne(p.getId());
 			order.getProducts().add(product);
 		}
-		
-		 order = repository.save(order);
-		 return new OrderDTO(order);
-			
-		}
+
+		order = repository.save(order);
+		return new OrderDTO(order);
+
 	}
 
+	@Transactional
+	public OrderDTO setDelivered(Long id) {
+		Order order = repository.getOne(id);
+		order.setStatus(OrderStatus.DELIVERED);
+		order = repository.save(order);
+		return new OrderDTO(order);
+	}
 
+}
